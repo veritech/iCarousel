@@ -611,6 +611,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             UIView *view = [itemViews objectForKey:number];
             [view.superview removeFromSuperview];
             [(NSMutableDictionary *)itemViews removeObjectForKey:number];
+			if ([delegate respondsToSelector:@selector(carousel:didUnloadItemAtIndex:)])
+			{
+				[delegate carousel:self didUnloadItemAtIndex:[number unsignedIntegerValue]];
+			}
         }
     }
     
@@ -638,6 +642,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	for (UIView *view in placeholderViews)
     {
 		[view.superview removeFromSuperview];
+	}
+	if ([delegate respondsToSelector:@selector(carouselDidUnloadAllItems:)])
+	{
+		[delegate carouselDidUnloadAllItems:self];
 	}
 	
 	//load new views

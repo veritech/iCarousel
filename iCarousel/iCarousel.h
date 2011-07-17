@@ -158,6 +158,8 @@ iCarouselType;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
+- (void)carousel:(iCarousel *)carousel didUnloadItemAtIndex:(NSUInteger) index;
+- (void)carouselDidUnloadAllItems:(iCarousel *)carousel;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
