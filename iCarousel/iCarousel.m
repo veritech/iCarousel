@@ -435,6 +435,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
     UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+	[container setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(didTap:)];
     tapGesture.delegate = self;
