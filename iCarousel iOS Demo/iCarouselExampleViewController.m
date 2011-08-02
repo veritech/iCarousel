@@ -9,7 +9,7 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS 20
+#define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
 #define ITEM_SPACING 210
 #define USE_BUTTONS YES
 
@@ -34,6 +34,7 @@
     if ((self = [super initWithCoder:aDecoder]))
     {
         //set up data
+        wrap = YES;
         self.items = [NSMutableArray array];
         for (int i = 0; i < NUMBER_OF_ITEMS; i++)
         {
@@ -57,8 +58,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    carousel.type = iCarouselTypeCoverFlow;
-    wrap = YES;
+    
+    //configure carousel
+    carousel.type = iCarouselTypeCoverFlow2;
+    navItem.title = @"CoverFlow2";
 }
 
 - (void)viewDidUnload
@@ -79,7 +82,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"CoverFlow2", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -134,7 +137,7 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
     if (USE_BUTTONS)
-    {
+    {  
         //create a numbered button
         UIImage *image = [UIImage imageNamed:@"page.png"];
         UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
@@ -162,7 +165,7 @@
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
-	//note: placeholder views are only displayed if wrapping is disabled
+	//note: placeholder views are only displayed on some carousels if wrapping is disabled
 	return 2;
 }
 

@@ -9,7 +9,7 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 20
+#define NUMBER_OF_ITEMS 19
 #define ITEM_SPACING 210
 
 
@@ -32,6 +32,7 @@
     if ((self = [super initWithWindow:window]))
     {
         //set up data
+        wrap = YES;
         self.items = [NSMutableArray array];
         for (int i = 0; i < NUMBER_OF_ITEMS; i++)
         {
@@ -44,8 +45,7 @@
 - (void)awakeFromNib
 {
     //configure carousel
-    wrap = YES;
-    carousel.type = iCarouselTypeCoverFlow;
+    carousel.type = iCarouselTypeCoverFlow2;
     [self.window makeFirstResponder:carousel];
 }
 
@@ -63,7 +63,7 @@
         view.layer.opacity = 1.0;
     }
 	
-    carousel.type = [sender tag];
+    carousel.type = (iCarouselType)[sender tag];
 }
 
 - (IBAction)toggleWrap:(id)sender;
@@ -71,6 +71,16 @@
     wrap = !wrap;
     [sender setState:wrap? NSOnState: NSOffState];
     [carousel reloadData];
+}
+
+- (IBAction)insertItem:(id)sender
+{
+    [carousel insertItemAtIndex:carousel.currentItemIndex animated:YES];
+}
+
+- (IBAction)removeItem:(id)sender
+{
+    [carousel removeItemAtIndex:carousel.currentItemIndex animated:YES];
 }
 
 #pragma mark -
