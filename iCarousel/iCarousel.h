@@ -111,6 +111,7 @@ iCarouselType;
 @property (nonatomic, retain, readonly) UIView *contentView;
 @property (nonatomic, readonly) float scrollSpeed;
 @property (nonatomic, readonly) float toggle;
+@property (nonatomic, assign) BOOL paging;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;

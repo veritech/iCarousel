@@ -63,6 +63,8 @@
 @property (nonatomic, assign) BOOL dragging;
 @property (nonatomic, assign) float scrollSpeed;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, assign) NSInteger indexWhereDraggingStarted;
+@property (nonatomic, assign) BOOL userInitiatedScroll;
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
@@ -108,6 +110,9 @@
 @synthesize scrollSpeed;
 @synthesize toggleTime;
 @synthesize toggle;
+@synthesize indexWhereDraggingStarted;
+@synthesize paging;
+@synthesize userInitiatedScroll;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -132,6 +137,8 @@
 	shouldWrap = NO;
     scrollSpeed = 1.0;
     toggle = 0.0;
+	paging = NO;
+	userInitiatedScroll = NO;
     
 	self.itemViews = [NSMutableDictionary dictionary];
     
@@ -1020,7 +1027,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
     float distance = [self decelerationDistance];
     startOffset = scrollOffset;
-    endOffset = roundf((startOffset + distance) / itemWidth) * itemWidth;
+	endOffset = roundf((startOffset + distance) / itemWidth) * itemWidth;
+	if (paging && userInitiatedScroll) {
+		if (!shouldWrap || ((indexWhereDraggingStarted !=0) && (indexWhereDraggingStarted != numberOfItems))) {
+			endOffset = fmin(fmax(endOffset, (indexWhereDraggingStarted - 1.4)*itemWidth), (indexWhereDraggingStarted + 1.4)*itemWidth);
+		} else if (indexWhereDraggingStarted == 0) {
+			endOffset = [self clampedOffset:fmin(fmax(-1.4*itemWidth,endOffset), 1.4*itemWidth)];
+		} else if (indexWhereDraggingStarted == numberOfItems) {
+			endOffset = [self clampedOffset:fmin(fmax((numberOfItems - 1.4)*itemWidth, endOffset), (numberOfItems + 1.4)*itemWidth)];
+		}
+	}
+
     if (!shouldWrap)
     {
         if (bounces)
@@ -1230,7 +1247,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				dragging = YES;
                 scrolling = NO;
                 decelerating = NO;
+				userInitiatedScroll = YES;
                 previousTranslation = [panGesture translationInView:self].x;
+				indexWhereDraggingStarted = self.currentItemIndex;
 				if ([delegate respondsToSelector:@selector(carouselWillBeginDragging:)])
 				{
 					[delegate carouselWillBeginDragging:self];
@@ -1257,6 +1276,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				{
 					[delegate carouselWillBeginDecelerating:self];
 				}
+				userInitiatedScroll = NO;
 				break;
             }
             default:
