@@ -1273,7 +1273,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				}
 				if (!decelerating)
 				{
-					[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+					if (paging && fabs([panGesture velocityInView:self].x) >= 1000.0 && panGesture.state == UIGestureRecognizerStateEnded) {
+						//user swiped
+						[self scrollToItemAtIndex:indexWhereDraggingStarted + (([panGesture velocityInView:self].x > 0) ? -1 : 1) animated:YES];
+					} else {
+						[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+					}
 				}
 				else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
 				{
