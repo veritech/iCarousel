@@ -638,6 +638,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     NSInteger max = numberOfItems - 1 + numberOfPlaceholders/2;
     NSInteger count = MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholders);
     NSInteger offset = self.currentItemIndex - floor((float)numberOfVisibleItems/2);
+	if (!shouldWrap) {
+		count += MIN(0, offset) + MIN(0, (numberOfItems - 1) - (self.currentItemIndex+floor((float)numberOfVisibleItems/2)));
+	}
     offset = MAX(min, MIN(max - count + 1, offset));
     for (NSInteger i = 0; i < count; i++)
     {
