@@ -1090,7 +1090,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             [self depthSortViews];
 			if ([delegate respondsToSelector:@selector(carouselDidEndScrollingAnimation:)])
 			{
+				[CATransaction setDisableActions:NO];
 				[delegate carouselDidEndScrollingAnimation:self];
+				[CATransaction setDisableActions:YES];
 			}
         }
     }
@@ -1107,7 +1109,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             decelerating = NO;
 			if ([delegate respondsToSelector:@selector(carouselDidEndDecelerating:)])
 			{
+				[CATransaction setDisableActions:NO];
 				[delegate carouselDidEndDecelerating:self];
+				[CATransaction setDisableActions:YES];
 			}
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
