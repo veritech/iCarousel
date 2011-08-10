@@ -636,11 +636,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:numberOfVisibleItems];
     NSInteger min = -(int)ceil((float)numberOfPlaceholders/2);
     NSInteger max = numberOfItems - 1 + numberOfPlaceholders/2;
-    NSInteger count = MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholders);
+    NSInteger count = numberOfVisibleItems;
     NSInteger offset = self.currentItemIndex - floor((float)numberOfVisibleItems/2);
 	if (!shouldWrap) {
-		count += MIN(0, offset) + MIN(0, (numberOfItems - 1) - (self.currentItemIndex+floor((float)numberOfVisibleItems/2)));
+		count += MIN(0, offset - min) + MIN(0, max - (self.currentItemIndex+floor((float)numberOfVisibleItems/2)));
 	}
+	count = MIN(count, numberOfItems + numberOfPlaceholders);
     offset = MAX(min, MIN(max - count + 1, offset));
     for (NSInteger i = 0; i < count; i++)
     {
