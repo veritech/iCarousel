@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.4
+//  Version 1.5.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -28,19 +28,14 @@
 //  misrepresented as being the original software.
 //
 //  3. This notice may not be removed or altered from any source distribution.
-
+//
 
 #import <QuartzCore/QuartzCore.h>
-
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
 #import <UIKit/UIKit.h>
-
 #else
-
 #import <Cocoa/Cocoa.h>
 typedef NSView UIView;
-
 #endif
 
 
@@ -52,6 +47,7 @@ typedef enum
     iCarouselTypeCylinder,
     iCarouselTypeInvertedCylinder,
     iCarouselTypeCoverFlow,
+    iCarouselTypeCoverFlow2,
     iCarouselTypeCustom
 }
 iCarouselType;
@@ -71,13 +67,11 @@ iCarouselType;
     NSInteger numberOfVisibleItems;
     UIView *contentView;
     NSDictionary *itemViews;
-    NSArray *placeholderViews;
     NSInteger previousItemIndex;
     float itemWidth;
     float scrollOffset;
-    float currentVelocity;
-    NSTimer *timer;
-    NSTimeInterval previousTime;
+    float startVelocity;
+    id timer;
     BOOL decelerating;
     BOOL scrollEnabled;
     float decelerationRate;
@@ -93,6 +87,9 @@ iCarouselType;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
 	BOOL dragging;
+    float scrollSpeed;
+    NSTimeInterval toggleTime;
+    float toggle;
 }
 #endif
 
@@ -112,18 +109,20 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSSet *visibleViews;
 @property (nonatomic, readonly) float itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
+@property (nonatomic, readonly) float scrollSpeed;
+@property (nonatomic, readonly) float toggle;
+@property (nonatomic, assign) BOOL paging;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)reloadData;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
-
-- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
-- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 #endif
 
@@ -156,6 +155,7 @@ iCarouselType;
 - (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
 - (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
+- (float)carouselScrollSpeed:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 - (void)carousel:(iCarousel *)carousel didUnloadItemAtIndex:(NSUInteger) index;
