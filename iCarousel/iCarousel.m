@@ -66,7 +66,6 @@
 @property (nonatomic, assign) NSInteger indexWhereDraggingStarted;
 @property (nonatomic, assign) BOOL userInitiatedScroll;
 
-- (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
 - (float)clampedOffset:(float)offset;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
