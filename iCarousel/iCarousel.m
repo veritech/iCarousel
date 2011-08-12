@@ -66,7 +66,6 @@
 @property (nonatomic, assign) NSInteger indexWhereDraggingStarted;
 @property (nonatomic, assign) BOOL userInitiatedScroll;
 
-- (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
 - (float)clampedOffset:(float)offset;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
@@ -143,6 +142,7 @@
 	self.itemViews = [NSMutableDictionary dictionary];
     
     contentView = [[UIView alloc] initWithFrame:self.bounds];
+	[contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
     
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
@@ -527,18 +527,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     
 	//hide containers for invisible views
     [view.superview setHidden:([view isHidden] || view.layer.opacity < 0.001)];
-}
-
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-- (void)layoutSubviews
-#else
-- (void)resizeSubviewsWithOldSize:(NSSize)oldSize
-#endif
-{
-    [CATransaction setDisableActions:YES];
-    contentView.frame = self.bounds;
-    [self layOutItemViews];
-    [CATransaction setDisableActions:NO];
 }
 
 - (void)transformItemViews
