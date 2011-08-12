@@ -119,6 +119,7 @@ iCarouselType;
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)reloadData;
+- (void)layOutItemViews;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
